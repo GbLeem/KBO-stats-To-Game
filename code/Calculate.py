@@ -1,3 +1,7 @@
+'''
+파워 계산
+홈런-11, 장타율-25
+'''
 class Power:
     def __init__(self, playerList, colsize):
         #for power
@@ -70,6 +74,7 @@ class Power:
                 temp_avgSLG += minusSLG
                 tick_SLG += minusSLG
 
+        print(f"{tick_HR}, {tick_SLG}")
         return playerPower + (tick_HR*2 + tick_SLG)/3
 
 
@@ -77,6 +82,10 @@ class Power:
         print(f"maxHR : {self.maxHR}\nminHR : {self.minHR} \navgHR : {self.avgHR} \n")
 
 
+'''
+스피드 계산
+도루, 도루 성공률, 병살타
+'''
 class Speed:
     def __init__(self, playerList, colsize):
         #for speed
@@ -195,7 +204,8 @@ class Speed:
                 temp_avgDoublePlay += minusDoublePlay
                 tick_DoublePlay += minusDoublePlay
 
-        #print(f"{tick_Run}, {tick_RunRatio}, {tick_DoublePlay}")
+        print(f"{tick_Run}, {tick_RunRatio}, {tick_DoublePlay}")
+
         return playerSpeed + (tick_Run + tick_RunRatio/2 - tick_DoublePlay)/5
         
 
@@ -203,3 +213,90 @@ class Speed:
         print(f"maxRun : {self.maxRun}\nminRun : {self.minRun} \navgRun : {self.avgRun} \n")
         print(f"maxRunRatio : {self.maxRunRatio}\nminRunRatio : {self.minRunRatio} \navgRunRatio : {self.avgRunRatio} \n")
 
+
+'''
+컨텍트 계산
+타율-23, 출루율(OBP)-24
+'''
+class Contact:
+    def __init__(self, playerList, colsize):
+        self.sumAverage = 0
+        self.avgAverage = 0
+        self.maxAverage = 0
+        self.minAverage = 0.3
+        
+        self.sumOBP = 0
+        self.avgOBP = 0
+        self.maxOBP = 0
+        self.minOBP = 0.3
+
+        #get player list
+        self.playerList = playerList
+        self.col = colsize
+            
+    def cal_sum(self):
+        for i in range(self.col):
+            self.sumAverage += float(self.playerList[i][23])
+            self.sumOBP += float(self.playerList[i][24])
+
+    def cal_avg(self):
+        self.avgAverage = self.sumAverage / self.col
+        self.avgOBP = self.sumOBP / self.col
+
+    def cal_max_min(self):
+        for i in range(self.col):
+            if float(self.playerList[i][23]) > self.maxAverage:
+                self.maxAverage = float(self.playerList[i][23])
+            if float(self.playerList[i][24]) < self.minAverage:
+                self.minAverage = float(self.playerList[i][24])
+
+        for i in range(self.col):
+            if float(self.playerList[i][23]) > self.maxOBP:
+                self.maxOBP = float(self.playerList[i][23])
+            if float(self.playerList[i][24]) < self.minOBP:
+                self.minOBP = float(self.playerList[i][24])
+
+    def cal_contact(self, playerlist, index):
+        plusAverage = (self.maxAverage + self.avgAverage) / 100
+        minusAverage = -(self.minAverage + self.avgAverage) / 100
+
+        plusOBP = (self.maxOBP + self.avgOBP) / 100
+        minusOBP = -(self.minOBP + self.avgOBP) / 100
+
+        # average temporary
+        temp_avgAverage = self.avgAverage
+        temp_avgOBP = self.avgOBP
+        
+        tick_Average = 0
+        tick_OBP = 0
+
+        playerContact = 70
+
+        # use average
+        if float(playerlist[index][23]) >= self.avgAverage:
+            while temp_avgAverage <= float(playerlist[index][23]):
+                temp_avgAverage += plusAverage 
+                tick_Average += plusAverage 
+        else:
+            while temp_avgAverage >= float(playerlist[index][23]):
+                temp_avgAverage += minusAverage
+                tick_Average += minusAverage
+
+        # use OBP
+        if float(playerlist[index][24]) >= self.avgOBP:
+            while temp_avgOBP <= float(playerlist[index][24]):
+                temp_avgOBP += plusOBP
+                tick_OBP += plusOBP 
+        else:
+            while temp_avgOBP >= float(playerlist[index][24]):
+                temp_avgOBP += minusOBP
+                tick_OBP += minusOBP
+
+        print(f"{tick_Average}, {tick_OBP}")
+
+        return playerContact + (tick_OBP + tick_Average) * 100
+        
+
+    def printAll(self):
+        print(f"maxAverage : {self.maxAverage}\nminAverage : {self.minAverage} \navgAverage : {self.avgAverage} \n")
+        print(f"maxOBP : {self.maxOBP}\nminOBP : {self.minOBP} \navgOBP : {self.avgOBP} \n")

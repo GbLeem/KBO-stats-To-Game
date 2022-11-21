@@ -70,8 +70,6 @@ class Power:
                 temp_avgSLG += minusSLG
                 tick_SLG += minusSLG
 
-        #print(f"tickHR : {tick_HR}, tickSLG : {tick_SLG}")
-
         return playerPower + (tick_HR*2 + tick_SLG)/3
 
 
@@ -198,7 +196,7 @@ class Speed:
                 tick_DoublePlay += minusDoublePlay
 
         #print(f"{tick_Run}, {tick_RunRatio}, {tick_DoublePlay}")
-        return playerSpeed + (tick_Run + tick_RunRatio/2 - tick_DoublePlay)
+        return playerSpeed + (tick_Run + tick_RunRatio/2 - tick_DoublePlay)/5
         
 
     def printAll(self):

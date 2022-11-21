@@ -20,7 +20,7 @@ player04_power = power.cal_power(playerList01, 3)
 player05_power = power.cal_power(playerList01, 4)
 
 # player100_power = power.cal_power(playerList01, 99)
-# player14_power = power.cal_power(playerList01, 13)
+player14_power = power.cal_power(playerList01, 13)
 
 print("===power===\n")
 print(f"{playerList01[0][1]}의 파워는 {player01_power}")
@@ -28,6 +28,8 @@ print(f"{playerList01[1][1]}의 파워는 {player02_power}")
 print(f"{playerList01[2][1]}의 파워는 {player03_power}")
 print(f"{playerList01[3][1]}의 파워는 {player04_power}")
 print(f"{playerList01[4][1]}의 파워는 {player05_power}")
+
+print(f"{playerList01[13][1]}의 파워는 {player14_power}")
 
 speed = c.Speed(playerList01,data01.getColsize())
 

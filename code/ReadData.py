@@ -10,12 +10,15 @@ class ReadDate:
 
     def makePlayerList(self):
         for line in self.lines:
-            self.colsize+=1
-            self.player.append(line.split())    
+            line = line.split()
+            if int(line[4]) >= 3:
+                self.player.append(line)
+                self.colsize+=1
 
     def getPlayerList(self):
         return self.player
 
     def getColsize(self):
         return self.colsize
+
 

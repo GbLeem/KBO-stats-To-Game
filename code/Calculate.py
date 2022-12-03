@@ -74,7 +74,7 @@ class Power:
                 temp_avgSLG += minusSLG
                 tick_SLG += minusSLG
 
-        print(f"{tick_HR}, {tick_SLG}")
+        #print(f"{tick_HR}, {tick_SLG}")
         return playerPower + (tick_HR*2 + tick_SLG)/3
 
 
@@ -204,7 +204,7 @@ class Speed:
                 temp_avgDoublePlay += minusDoublePlay
                 tick_DoublePlay += minusDoublePlay
 
-        print(f"{tick_Run}, {tick_RunRatio}, {tick_DoublePlay}")
+        #print(f"{tick_Run}, {tick_RunRatio}, {tick_DoublePlay}")
 
         return playerSpeed + (tick_Run + tick_RunRatio/2 - tick_DoublePlay)/5
         
@@ -247,12 +247,12 @@ class Contact:
         for i in range(self.col):
             if float(self.playerList[i][23]) > self.maxAverage:
                 self.maxAverage = float(self.playerList[i][23])
-            if float(self.playerList[i][24]) < self.minAverage:
-                self.minAverage = float(self.playerList[i][24])
+            if float(self.playerList[i][23]) < self.minAverage:
+                self.minAverage = float(self.playerList[i][23])
 
         for i in range(self.col):
-            if float(self.playerList[i][23]) > self.maxOBP:
-                self.maxOBP = float(self.playerList[i][23])
+            if float(self.playerList[i][24]) > self.maxOBP:
+                self.maxOBP = float(self.playerList[i][24])
             if float(self.playerList[i][24]) < self.minOBP:
                 self.minOBP = float(self.playerList[i][24])
 
@@ -292,7 +292,7 @@ class Contact:
                 temp_avgOBP += minusOBP
                 tick_OBP += minusOBP
 
-        print(f"{tick_Average}, {tick_OBP}")
+        #print(f"{tick_Average}, {tick_OBP}")
 
         return playerContact + (tick_OBP + tick_Average) * 100
         
@@ -300,3 +300,185 @@ class Contact:
     def printAll(self):
         print(f"maxAverage : {self.maxAverage}\nminAverage : {self.minAverage} \navgAverage : {self.avgAverage} \n")
         print(f"maxOBP : {self.maxOBP}\nminOBP : {self.minOBP} \navgOBP : {self.avgOBP} \n")
+
+
+'''
+스로잉 계산
+보살(BK) - 9, 외야수인 경우 BK - 9 + ARM - 14
+'''
+class Throwing:
+    def __init__(self, playerList, colsize):
+        self.sumBK = 0 # int
+        self.avgBK = 0
+        self.maxBK = 0
+        self.minBK = 0
+        
+        self.sumARM = 0. # float
+        self.avgARM = 0.
+        self.maxARM = 0.
+        self.minARM = 0.
+
+        #get player list
+        self.playerList = playerList
+        self.col = colsize
+            
+    def cal_sum(self):
+        for i in range(self.col):
+            self.sumBK += int(self.playerList[i][9])
+            if float(self.playerList[i][14]) != 0:
+                self.sumARM += float(self.playerList[i][14])
+
+    def cal_avg(self):
+        self.avgBK = self.sumBK / self.col
+        self.avgARM = self.sumARM / self.col
+
+    def cal_max_min(self):
+        for i in range(self.col):
+            if int(self.playerList[i][9]) > self.maxBK:
+                self.maxBK = int(self.playerList[i][9])
+            if float(self.playerList[i][9]) < self.minBK:
+                self.minBK = float(self.playerList[i][9])
+
+        for i in range(self.col):
+            if float(self.playerList[i][14]) != 0:
+                if float(self.playerList[i][14]) > self.maxARM:
+                    self.maxARM = float(self.playerList[i][14])
+                if float(self.playerList[i][14]) < self.minARM:
+                    self.minARM = float(self.playerList[i][14])
+
+    def cal_throwing(self, playerlist, index):
+        plusBK = (self.maxBK + self.avgBK) / 100
+        minusBK = -(self.minBK + self.avgBK) / 100
+
+        plusARM = (self.maxARM + self.avgARM) / 100
+        minusARM = -(self.minARM + self.avgARM) / 100
+
+        # average temporary
+        temp_avgBK = self.avgBK
+        temp_avgARM = self.avgARM
+        
+        tick_BK = 0
+        tick_ARM = 0
+
+        playerThrowing = 70
+
+        # use BK
+        if float(playerlist[index][9]) >= self.avgBK:
+            while temp_avgBK <= float(playerlist[index][9]):
+                temp_avgBK += plusBK 
+                tick_BK += plusBK 
+        else:
+            while temp_avgBK >= float(playerlist[index][9]):
+                temp_avgBK += minusBK
+                tick_BK += minusBK
+
+        # use ARM
+        if float(playerlist[index][14]) != 0:
+            if float(playerlist[index][14]) >= self.avgARM:
+                while temp_avgARM <= float(playerlist[index][14]):
+                    temp_avgARM += plusARM
+                    tick_ARM += plusARM 
+            else:
+                while temp_avgARM >= float(playerlist[index][14]):
+                    temp_avgARM -= minusARM
+                    tick_ARM += minusARM
+
+        #print(f"{tick_BK}, {tick_ARM}")
+
+        if tick_ARM == 0:
+            return playerThrowing + tick_BK/15  #비율 조정을 위한 나눗셈
+        else:
+            return playerThrowing + tick_BK+tick_ARM*2
+        
+        
+
+    def printAll(self):
+        print(f"maxBK : {self.maxBK}\nminBK : {self.minBK} \navgBK : {self.avgBK} \n")
+        print(f"maxARM : {self.maxARM}\nminARM : {self.minARM} \navgARM : {self.avgARM} \n")
+
+
+'''
+수비 계산
+수비율(FP)-10, WWA-3 
+'''
+class Defense:
+    def __init__(self, playerList, colsize):
+        self.sumFP = 0 # int
+        self.avgFP = 0
+        self.maxFP = 0
+        self.minFP = 0
+        
+        self.sumWWA = 0. # float
+        self.avgWWA = 0.
+        self.maxWWA = 0.
+        self.minWWA = 0.
+
+        #get player list
+        self.playerList = playerList
+        self.col = colsize
+            
+    def cal_sum(self):
+        for i in range(self.col):
+            self.sumFP += int(self.playerList[i][10])
+            #if float(self.playerList[i][14]) != 0:
+            self.sumWWA += float(self.playerList[i][3])
+
+    def cal_avg(self):
+        self.avgFP = self.sumFP / self.col
+        self.avgWWWA = self.sumWWA / self.col
+
+    def cal_max_min(self):
+        for i in range(self.col):
+            if int(self.playerList[i][10]) > self.maxFP:
+                self.maxFP = int(self.playerList[i][10])
+            if float(self.playerList[i][10]) < self.minFP:
+                self.minFP = float(self.playerList[i][10])
+
+        for i in range(self.col):
+            #if float(self.playerList[i][14]) != 0:
+            if float(self.playerList[i][3]) > self.maxWWA:
+                self.maxWWA = float(self.playerList[i][3])
+            if float(self.playerList[i][3]) < self.minWWA:
+                self.minWWA = float(self.playerList[i][3])
+
+    def cal_defense(self, playerlist, index):
+        plusFP = (self.maxFP + self.avgFP) / 100
+        minusFP = -(self.minFP + self.avgFP) / 100
+
+        plusWWA = (self.maxWWA + self.avgWWA) / 100
+        minusWWA = -(self.minWWA + self.avgWWA) / 100
+
+        # average temporary
+        temp_avgFP = self.avgFP
+        temp_avgWWA = self.avgWWA
+        
+        tick_FP = 0
+        tick_WWA = 0
+
+        playerDefense = 70
+
+        # use BK
+        if float(playerlist[index][10]) >= self.avgFP:
+            while temp_avgFP <= float(playerlist[index][10]):
+                temp_avgFP += plusFP 
+                tick_FP += plusFP 
+        else:
+            while temp_avgFP >= float(playerlist[index][10]):
+                temp_avgFP += minusFP
+                tick_FP += minusFP
+
+        # use ARM
+        #if float(playerlist[index][14]) != 0:
+        if float(playerlist[index][3]) >= self.avgWWA:
+            while temp_avgWWA <= float(playerlist[index][3]):
+                temp_avgWWA += plusWWA
+                tick_WWA += plusWWA 
+        else:
+            while temp_avgWWA >= float(playerlist[index][3]):
+                temp_avgWWA -= minusWWA
+                tick_WWA += minusWWA
+
+        #print(f"{tick_FP}, {tick_WWA}")
+
+
+        return playerDefense + tick_FP + tick_WWA

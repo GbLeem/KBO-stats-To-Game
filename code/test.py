@@ -1,6 +1,10 @@
+from matplotlib import pyplot as plt
+import numpy as np
+
 import ReadData as r
 import Calculate as c
 import Fan as F
+
 
 data01 = r.ReadDate("data/data01.txt")
 data01.makePlayerList()
@@ -192,13 +196,16 @@ OFdefense.cal_max_min()
 # playerList01
 # playerOFList
 
+HongChangKi_name = playerList01[0][1]
 HongChangKi_power = power.cal_power(playerList01, 0)
 HongChangKi_contact = contact.cal_contact(playerList01, 0)
 HongChangKi_speed = speed.cal_speed(playerList01, 0)
 HongChangKi_throwing = OFthrowing.cal_throwing(playerList01, 115)
 HongChangKi_defense = OFdefense.cal_defense(playerList01, 115)
 
-print(f"{playerList01[0][1]} = 파워: {HongChangKi_power}, 컨텍:{HongChangKi_contact}, 스피드:{HongChangKi_speed}, 스로잉:{HongChangKi_throwing}, 수비:{HongChangKi_defense}")
+HongChangKi = [HongChangKi_power,HongChangKi_contact,HongChangKi_speed,HongChangKi_throwing,HongChangKi_defense]
+#print(f"{playerList01[0][1]} = 파워: {HongChangKi_power}, 컨텍:{HongChangKi_contact}, 스피드:{HongChangKi_speed}, 스로잉:{HongChangKi_throwing}, 수비:{HongChangKi_defense}")
+
 
 
 LeejungHoo_power = power.cal_power(playerList01, 1)
@@ -207,4 +214,29 @@ LeejungHoo_speed = speed.cal_speed(playerList01, 1)
 LeejungHoo_throwing = OFthrowing.cal_throwing(playerList01, 14)
 LeejungHoo_defense = OFdefense.cal_defense(playerList01, 14)
 
-print(f"{playerList01[1][1]} = 파워: {LeejungHoo_power}, 컨텍:{LeejungHoo_contact}, 스피드:{LeejungHoo_speed}, 스로잉:{LeejungHoo_throwing}, 수비:{LeejungHoo_defense}")
+LeejungHoo = [LeejungHoo_power,LeejungHoo_contact,LeejungHoo_speed,LeejungHoo_throwing,LeejungHoo_defense]
+#print(f"{playerList01[1][1]} = 파워: {LeejungHoo_power}, 컨텍:{LeejungHoo_contact}, 스피드:{LeejungHoo_speed}, 스로잉:{LeejungHoo_throwing}, 수비:{LeejungHoo_defense}")
+
+ma9data = r.ReadDate("data/ma9data01.txt")
+ma9data.makePlayerList()
+ma9playerlist = ma9data.getPlayerList()
+
+#print(ma9playerlist)
+
+# bar_width = 0.35
+# x = ["power","contact","speed","throwing","defense"]
+# index = np.arange(len(x))
+# newY = [float(ma9playerlist[0][1]),float(ma9playerlist[0][2]),float(ma9playerlist[0][3]),float(ma9playerlist[0][4]),float(ma9playerlist[0][5])]
+# plt.bar(index, HongChangKi, color = "blue",width=0.35)
+# plt.bar(index+bar_width, newY, color = "red",width=0.35)
+# plt.xticks(index, x, fontsize = 15)
+# plt.show()
+
+bar_width = 0.35
+x = ["power","contact","speed","throwing","defense"]
+index = np.arange(len(x))
+newY = [float(ma9playerlist[1][1]),float(ma9playerlist[1][2]),float(ma9playerlist[1][3]),float(ma9playerlist[1][4]),float(ma9playerlist[1][5])]
+plt.bar(index, LeejungHoo, color = "blue",width=0.35)
+plt.bar(index+bar_width, newY, color = "red",width=0.35)
+plt.xticks(index, x, fontsize = 15)
+plt.show()

@@ -6,14 +6,37 @@ player1.draw_all()
 player2 = d.OFPlayer(0,115,0) # 홍창기
 player2.draw_all()
 
-player3 = d.OFPlayer(35,106,5) # 채은성
-player3.draw_all()
+# player3 = d.OFPlayer(35,106,5) # 채은성
+# player3.draw_all()
 
-player4 = d.OFPlayer(23,110,6) #김현수
-player4.draw_all()
+# player4 = d.OFPlayer(23,110,6) #김현수
+# player4.draw_all()
 
-player5 = d.IFPlayer(29,3,10) #하주석
-player5.draw_all()
+# player5 = d.IFPlayer(29,3,10) #하주석
+# player5.draw_all()
+
+# player_황재균 = d.IFPlayer(33,148,7)
+# player_황재균.draw_all()
+
+# player_한동희 = d.IFPlayer(24,98,9)
+# player_한동희.draw_all()
+
+player_이정후 = d.OFPlayer(14,1,1)
+player_이정후.draw_all(14,1,1)
+
+# Compare_황재균한동희 = d.CompareIFPlayer(33,148,7,24,98,9)
+# Compare_황재균한동희.draw_all()
+
+Compare_나성범김재환 = d.CompareOFPlayer(12,105,14, 8,124,15)
+Compare_나성범김재환.draw_all()
+# Compare_한유섬나성범 = d.CompareOFPlayer(13,103,8,12,105,14)
+# Compare_한유섬나성범.draw_all()
+
+
+# Compare_마차도하주석 = d.CompareIFPlayer(38,1,12,29,3,10)
+# Compare_마차도하주석.draw_all()
+#player_최원준 = d.OFPlayer()
+#player_이용규 = d.OFPlayer()
 
 #50	김인태	21두RF	1.74	133	418	344	51	89	15	1	8	130	46	0	2	62	3	0	67	10	5	4	.259	.373	.378	.751	.355	113.3	1.74	1.54
 #33	배정대	21KCF	3.02	144	595	510	85	132	23	1	12	193	68	19	7	65	12	2	132	9	3	5	.259	.353	.378	.732	.345	101.1	3.02	-1.05
